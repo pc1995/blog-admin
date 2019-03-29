@@ -225,7 +225,7 @@
             }).then(res => {
               this.visible = false
               this.getArticle()
-              this.$Message.success('添加文章成功')
+              this.$Message.success(res.message)
             })
           }
         })
@@ -279,8 +279,17 @@
         this.markdown = value
         this.content = render
       },
-      originalChange(original) {
-        console.log('original', original)
+      originalChange(row) {
+        this.$store.dispatch('article/article', {
+          method: 'PATCH',
+          body: {
+            id: row.id,
+            original: !row.original
+          }
+        }).then(res => {
+          this.$Message.success(res.message)
+          this.getArticle()
+        })
       }
 
     },
@@ -294,7 +303,7 @@
 
 <style lang="less" scoped>
   .article {
-    /deep/ .m-content {
+    /deep/.m-content {
       overflow: hidden;
       display: -webkit-box;
       text-overflow: ellipsis;

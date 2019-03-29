@@ -62,7 +62,15 @@ const columns = (Vue) => {
     {
       title: '描述',
       key: 'desc',
-      align: 'center'
+      align: 'center',
+      render(h, {row}) {
+        return h('p', {
+          class: 'm-content',
+          attrs: {
+            title: row.desc
+          }
+        }, row.desc)
+      }
     },
     {
       title: '文章内容',
@@ -71,7 +79,10 @@ const columns = (Vue) => {
       width: '400',
       render(h, {row}) {
         return h('p', {
-          class: 'm-content'
+          class: 'm-content',
+          attrs: {
+            title: row.markdown
+          }
         }, row.markdown)
       }
     },
