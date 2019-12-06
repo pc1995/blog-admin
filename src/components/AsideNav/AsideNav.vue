@@ -1,6 +1,7 @@
 <template>
   <div class="aside-nav-container" :class="{hide: type === 'unfold'}">
     <Menu :theme="theme" width="100%" :active-name="activeName" @on-select="select">
+      <img class="user-avatar" src="./img/1099.png" v-if="type === 'fold'" alt="">
       <MenuItem :title="item.title" v-for="(item, index) in nav" :key="index" :name="item.path">
         <template>
           <Icon style="font-size: 18px" :type="item.icon" />
@@ -35,12 +36,27 @@
             path: '/article'
           },
           {
+            title: '教学视频',
+            icon: 'md-videocam',
+            path: '/course'
+          },
+          {
             title: '分类管理',
             icon: 'ios-briefcase-outline',
             path: '/category'
           },
           {
             title: '轮播广告',
+            icon: 'ios-albums-outline',
+            path: '/banners'
+          },
+          {
+            title: '评论管理',
+            icon: 'ios-albums-outline',
+            path: '/banners'
+          },
+          {
+            title: '打赏管理',
             icon: 'ios-albums-outline',
             path: '/banners'
           }
@@ -80,6 +96,12 @@
     bottom: 0;
     z-index: 100;
     transition: all .2s;
+    .user-avatar {
+      display: block;
+      width: 80px;
+      margin-bottom: 20px;
+      margin-left: 20px;
+    }
     &.minWidth {
       width: 70px;
     }
@@ -88,6 +110,7 @@
     }
     /deep/.ivu-menu {
       background-color: #000c17;
+      padding-top: 20px;
     }
     /deep/.ivu-menu-dark {
       background-color: #001529;

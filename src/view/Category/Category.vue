@@ -40,7 +40,7 @@
   const FORM_DATA = {
     name: '',
     category_type: 1,
-    parent_category: ''
+    parent_category: '',
   }
   export default {
     name: "Category",
@@ -64,7 +64,8 @@
         columns: Columns(this),
         delVisible: false,
         currentData: null,
-        isEdit: false
+        isEdit: false,
+
       }
     },
     created() {
@@ -91,6 +92,11 @@
               method: 'POST',
               body: opt
             }
+            Object.keys(payload.body).map(key => {
+              if (!payload.body[key] && typeof payload.body[key] !== 'number') {
+                delete payload.body[key]
+              }
+            })
             this.$store.dispatch('article/category', payload).then(res => {
               this.$Message.success(res.message)
               this.getCategoryList()
@@ -116,7 +122,7 @@
       deleteData() {
         this.$store.dispatch('article/category', {
           method: 'DELETE',
-          body: {
+          params: {
             id: this.currentData.id
           }
         }).then(res => {
@@ -131,7 +137,7 @@
           this.$store.dispatch('article/category', {
             method: 'GET',
             body: {
-              category_type: Number(this.formData.category_type) - 1
+              category_type: 1
             }
           }).then(res => {
             this.parent_types = res.data

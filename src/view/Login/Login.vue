@@ -51,7 +51,7 @@
       getVerifyCode() {
         this.$store.dispatch('user/code').then(res => {
           if (res.state === 0) {
-            this.codeImg = 'data:' + res.data.img
+            this.codeImg =  res.data.image
           }
         })
       },

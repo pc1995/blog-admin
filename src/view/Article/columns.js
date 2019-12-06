@@ -30,14 +30,16 @@ const columns = (Vue) => {
       key: 'original',
       align: 'center',
       render(h, {row}) {
-        console.log('row.original', row.original)
         return h('i-switch', {
           props: {
             value: row.original,
             size: 'large'
           },
           on: {
-            'on-change': () => (Vue.originalChange(row))
+            'on-change': () => (Vue.update({
+              id: row.id,
+              original: !row.original
+            }))
           }
         }, [
           h('span', {
@@ -50,13 +52,39 @@ const columns = (Vue) => {
       }
     },
     {
+      title: '是否热门',
+      key: 'is_hot',
+      align: 'center',
+      render(h, {row}) {
+        return h('i-switch', {
+          props: {
+            value: row.is_hot,
+            size: 'large'
+          },
+          on: {
+            'on-change': () => (Vue.update({
+              id: row.id,
+              is_hot: !row.is_hot
+            }))
+          }
+        }, [
+          h('span', {
+            slot: 'open'
+          }, '热门'),
+          h('span', {
+            slot: 'close'
+          }, '普通')
+        ])
+      }
+    },
+    {
       title: '发布时间',
-      key: 'add_time',
+      key: 'created_at',
       align: 'center'
     },
     {
       title: '更新时间',
-      key: 'update_time',
+      key: 'updated_at',
       align: 'center'
     },
     {

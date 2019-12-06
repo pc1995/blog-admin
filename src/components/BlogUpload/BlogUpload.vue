@@ -41,7 +41,7 @@
       },
       upload() {
         this.$store.dispatch('article/upload', this.formData).then(res => {
-          this.$emit('response', res.data)
+          this.$emit('response', res.data[0])
           if (res.state === 0) {
             this.$Message.success('上传成功')
           }

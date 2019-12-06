@@ -6,7 +6,7 @@ import router from './router'
 import store from './store'
 import iview from 'iview'
 import mavonEditor from 'mavon-editor'
-
+import Axios from './utils/Axios'
 import 'iview/dist/styles/iview.css'
 import './assets/style/reset.less'
 import './assets/style/common.less'
@@ -17,6 +17,7 @@ Vue.use(iview)
 Vue.use(mavonEditor)
 
 Vue.config.productionTip = false
+Vue.prototype.$axios = Axios
 
 /* eslint-disable no-new */
 new Vue({

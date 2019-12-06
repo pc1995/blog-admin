@@ -4,7 +4,7 @@ export default {
 
   actions: {
     async ['banners/banners']({commit}, payload) {
-      const res = await Axios('/v1/api/banner/', payload)
+      const res = await Axios('/v1/api/banners', payload)
       return res
     }
   }

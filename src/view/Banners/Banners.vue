@@ -160,7 +160,7 @@
         })
       },
       response(data) {
-        this.formData.image = data.image
+        this.formData.image = data
       },
       deleteBanner(row) {
         this.currentData = row

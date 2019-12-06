@@ -6,6 +6,8 @@ import Home from '../view/Home/Home'
 import Article from '../view/Article/Article'
 import Category from '../view/Category/Category'
 import Banners from '../view/Banners/Banners'
+import Columns from '../view/Columns/Columns'
+import Course from '../view/Course/Course'
 
 Vue.use(Router)
 
@@ -33,6 +35,11 @@ const router =  new Router({
       component: Article
     },
     {
+      path: '/course',
+      name: 'Course',
+      component: Course
+    },
+    {
       path: '/category',
       name: 'Category',
       component: Category
@@ -41,6 +48,11 @@ const router =  new Router({
       path: '/banners',
       name: 'Banners',
       component: Banners
+    },
+    {
+      path: '/columns',
+      name: 'Columns',
+      component: Columns
     },
   ],
 })

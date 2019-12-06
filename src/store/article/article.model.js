@@ -11,18 +11,18 @@ export default {
   },
   actions: {
     async ['article/article']({commit, state}, payload) {
-      const res = await Axios('/v1/api/article/', payload)
+      const res = await Axios('/v1/api/articles', payload)
       return res
     },
     async ['article/upload']({commit, state}, payload) {
-      const res = await Axios('/v1/api/upload/', {
+      const res = await Axios('/v1/api/upload', {
         method: 'POST',
         body: payload
       })
       return res
     },
     async ['article/category']({commit, state}, payload) {
-      const res = await Axios('/v1/api/category/', payload)
+      const res = await Axios('/v1/api/category', payload)
       return res
     },
   }

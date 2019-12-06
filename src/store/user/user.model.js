@@ -33,7 +33,7 @@ export default {
       return res
     },
     async ['user/code']({commit}, payload) {
-      const res = await Axios('/v1/api/code/')
+      const res = await Axios('/v1/api/verify')
       console.log('res')
       return res
     }

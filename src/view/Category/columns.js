@@ -17,7 +17,7 @@ const columns = (Vue) => {
     },
     {
       title: '创建时间',
-      key: 'add_time',
+      key: 'created_at',
       align: 'center'
     },
     {

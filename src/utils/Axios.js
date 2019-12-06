@@ -3,26 +3,22 @@ import {
   apiHost
 } from "./environment"
 
-const instance = axios.create({
-  headers: {
-    Authorization: `Token ${window.localStorage.getItem('token')}`
-  },
-})
-
-instance.interceptors.request.use(
+axios.interceptors.request.use(
   config => {
+    config.headers.Authorization = `Bearer ${window.localStorage.getItem('token')}`
     return config
   }
-)
+);
 
-instance.interceptors.response.use(
+axios.interceptors.response.use(
   response => {
-    return response
+    return response;
   },
   error => {
-    return error
+    return error.response;
   }
-)
+);
+
 
 const Axios = async (url, options = {}) => {
   let api = url.includes('http') ? url : `${apiHost}${url}`;
@@ -32,21 +28,20 @@ const Axios = async (url, options = {}) => {
     const opt = {
       params: options.body
     }
-    console.log('opt.headers', opt.headers)
     if (options.headers) {
       opt.headers = options.headers
     }
     console.log('opt', opt)
-    res = await instance.get(api, opt)
+    res = await axios.get(api, opt)
   } else if (method === 'post') {
-    res = await instance.post(api, options.body)
+    res = await axios.post(api, options.body, options.config || {})
   } else if (method === 'patch') {
-    api += `${options.body.id}/`
+    api += `/${options.body.id}`
     const body = options.body
     delete body.id
-    res = await instance.patch(api, body)
+    res = await axios.patch(api, body)
   } else if (method === 'delete') {
-    res = await instance.delete(`${api}${options.body.id}/`)
+    res = await axios.delete(`${api}/${options.params.id}`)
   }
   return new Promise((resolve, reject) => {
     if (res && res.status >= 200 && res.status < 300) {
