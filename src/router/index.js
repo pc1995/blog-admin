@@ -8,6 +8,8 @@ import Category from '../view/Category/Category'
 import Banners from '../view/Banners/Banners'
 import Columns from '../view/Columns/Columns'
 import Course from '../view/Course/Course'
+import Comment from '../view/Comment/Comment'
+import Money from '../view/Money/Money'
 
 Vue.use(Router)
 
@@ -53,6 +55,16 @@ const router =  new Router({
       path: '/columns',
       name: 'Columns',
       component: Columns
+    },
+    {
+      path: '/comment',
+      name: 'Comment',
+      component: Comment
+    },
+    {
+      path: '/money',
+      name: 'Money',
+      component: Money
     },
   ],
 })

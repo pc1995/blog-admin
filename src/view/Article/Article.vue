@@ -191,7 +191,8 @@
         const {page, pageSize} = this.page
         const opt = {
           page: page,
-          page_size: pageSize
+          page_size: pageSize,
+          // is_video: 0
         }
         this.$store.dispatch('article/article', {
           body: opt
@@ -228,6 +229,7 @@
               img_src: this.formData.imgSrc,
               article_type: this.formData.article_type,
               category_type: this.category_text,
+              is_video: false
             }
             if(this.formData.first_type_id) {
               payload.first_type_id =this.formData.first_type_id
@@ -292,7 +294,8 @@
       },
       deleteArticle(row) {
         this.delVisible = true
-        this.currentData = row
+        this.currentData = row;
+        this.deleteData()
       },
       deleteData() {
         this.$store.dispatch('article/article', {

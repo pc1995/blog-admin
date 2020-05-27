@@ -1,4 +1,4 @@
-const apiHost = 'http://192.168.10.79:7002'
+const apiHost = 'http://192.168.110.9:7002'
 
 export {
   apiHost

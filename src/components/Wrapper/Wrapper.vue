@@ -46,6 +46,7 @@
       margin-left: 180px;
       background-color: #f2f2f2;
       transition: all .2s;
+      min-width: 1740px;
       .detail-content-wrapper {
         padding: 20px 10px 0;
       }

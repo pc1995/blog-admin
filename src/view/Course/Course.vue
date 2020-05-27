@@ -86,9 +86,6 @@
     data() {
       return {
         dataSource: [],
-        page: {
-          total: 0
-        },
         visible: false,
         columns: Columns(this),
         videoType: [
@@ -113,7 +110,12 @@
         content: '',
         videoFile: '',
         progress: 0,
-        videoKey: ''
+        videoKey: '',
+        page: {
+          pageSize: 10,
+          page: 1,
+          total: 0
+        },
       }
     },
     created() {
@@ -124,10 +126,17 @@
         this.visible = true;
       },
       getList() {
-        this.$axios('/v1/api/course').then(res => {
-          if (res.state === 0) {
-            this.dataSource = res.data
-          }
+        const {page, pageSize} = this.page
+        const opt = {
+          page: page,
+          page_size: pageSize,
+          is_video: 1
+        }
+        this.$store.dispatch('article/article', {
+          body: opt
+        }).then(res => {
+          this.dataSource = res.data;
+          this.page.total = res.attributes.total
         })
       },
       save(value = this.markdown, render = this.content) {
@@ -138,12 +147,13 @@
         if (this.editType  === 'edit') {
           body.id = this.currentId
         }
+        body.is_video = true
         if (this.videoKey) {
           body.video_key = this.videoKey
         }
-        this.$axios('/v1/api/course', {
-          method: this.editType === 'add' ? 'POST' : 'PATCH',
-          body: body
+        this.$store.dispatch('article/article', {
+          method: this.editType  === 'edit' ? 'PATCH' : 'POST',
+          body
         }).then(res => {
           console.log('upload video', res)
           this.loading = false;

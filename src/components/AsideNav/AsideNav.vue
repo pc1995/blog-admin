@@ -53,12 +53,12 @@
           {
             title: '评论管理',
             icon: 'ios-albums-outline',
-            path: '/banners'
+            path: '/comment'
           },
           {
             title: '打赏管理',
             icon: 'ios-albums-outline',
-            path: '/banners'
+            path: '/money'
           }
         ],
         show: true,
