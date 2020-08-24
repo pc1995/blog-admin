@@ -4,7 +4,7 @@
       <Icon class="arrow" type="ios-arrow-back" @click="prev" />
       <div class="nav-list-wrapper" ref="navList">
         <ul ref="ul">
-          <li v-for="(item, index) in tabNav" :key="index" @click="onChange(item, index)" :class="{active: index === oldIndex}">
+          <li v-for="(item, index) in tabNav" :key="index" @click="onChange(item, index)" :class="{ active: index === oldIndex }">
             <span>{{item.title}}</span>
             <Icon type="md-close" />
           </li>
@@ -35,6 +35,7 @@
       onChange(data, index) {
         this.$nextTick(() => {
           this.onTranslate(index);
+          this.$router.push(data.path)
         })
       },
       onTranslate(index) {
