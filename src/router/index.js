@@ -10,6 +10,7 @@ import Columns from '../view/Columns/Columns'
 import Course from '../view/Course/Course'
 import Comment from '../view/Comment/Comment'
 import Money from '../view/Money/Money'
+import Tags from '../view/Tags/Tags'
 
 Vue.use(Router)
 
@@ -65,6 +66,11 @@ const router =  new Router({
       path: '/money',
       name: 'Money',
       component: Money
+    },
+    {
+      path: '/tags',
+      name: 'Tags',
+      component: Tags
     },
   ],
 })

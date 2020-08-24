@@ -1,19 +1,15 @@
 <template>
   <section class="login-container">
     <div class="login-wrapper">
-      <div class="logo">Angel Blog</div>
+      <div class="logo">
+        <span>PUB Admin</span>
+      </div>
       <Form :model="loginForm" ref="form">
         <FormItem prop="username">
           <Input v-model="loginForm.username" placeholder="请输入用户名"></Input>
         </FormItem>
         <FormItem prop="password">
           <Input v-model="loginForm.password" type="password" placeholder="请输入密码"></Input>
-        </FormItem>
-        <FormItem prop="code" style="margin-bottom: 10px">
-          <div class="verify-code">
-            <Input placeholder="请输入验证码"></Input>
-            <img class="code" :src="codeImg" alt="" @click="getVerifyCode">
-          </div>
         </FormItem>
         <FormItem style="margin-bottom: 10px;text-align: center">
           <div class="profile">

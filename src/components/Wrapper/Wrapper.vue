@@ -1,8 +1,9 @@
 <template>
   <section class="admin-wrapper">
-    <aside-nav :type="type" :style="{width: type === 'fold' ? '180px' : '70px'}"></aside-nav>
-    <div class="content-wrapper" :style="{marginLeft: type === 'fold' ? '180px' : '70px'}">
+    <aside-nav :type="type" :style="{width: type === 'fold' ? '200px' : '70px'}"></aside-nav>
+    <div class="content-wrapper" :style="{marginLeft: type === 'fold' ? '200px' : '70px'}">
       <header-top @shrink="shrink"></header-top>
+      <tab-nav />
       <div class="detail-content-wrapper">
         <slot name="content"></slot>
       </div>
@@ -15,6 +16,7 @@
   import AsideNav from '../AsideNav/AsideNav'
   import HeaderTop from '../HeaderTop/HeaderTop'
   import Loader from '../Loader/Loader'
+  import TabNav from "../TabNav/TabNav";
   export default {
     name: "Wrapper",
     data() {
@@ -30,7 +32,8 @@
     components: {
       AsideNav,
       HeaderTop,
-      Loader
+      Loader,
+      TabNav
     }
   }
 </script>
@@ -44,11 +47,10 @@
       width: 0;
       height: 100%;
       margin-left: 180px;
-      background-color: #f2f2f2;
       transition: all .2s;
-      min-width: 1740px;
+      /*min-width: 1740px;*/
       .detail-content-wrapper {
-        padding: 20px 10px 0;
+        padding: 5px 10px 0;
       }
     }
   }

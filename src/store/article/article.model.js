@@ -1,4 +1,4 @@
-import Axios from '../../utils/Axios'
+import Axios from '../../utils/axios'
 export default {
   namespace: 'article',
   state: {
@@ -23,6 +23,10 @@ export default {
     },
     async ['article/category']({commit, state}, payload) {
       const res = await Axios('/v1/api/category', payload)
+      return res
+    },
+    async ['article/tags']({commit, state}, payload) {
+      const res = await Axios('/v1/api/tags', payload)
       return res
     },
   }

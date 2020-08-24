@@ -1,9 +1,17 @@
 <template>
   <header class="header-container">
-    <div class="menu-shrink" @click="shrink">
-      <menu-icon :type="type"></menu-icon>
+    <div class="left">
+      <div class="menu-shrink" @click="shrink">
+        <menu-icon :type="type"></menu-icon>
+      </div>
+      <Breadcrumb class="bread">
+        <BreadcrumbItem v-for="(item, index) in breadcrumbList" :key="index">{{item.title}}</BreadcrumbItem>
+      </Breadcrumb>
     </div>
-    <div class="admin">
+    <div class="right">
+      <div class="expand" @click="fullScreen">
+        <Icon type="md-expand" size="20" />
+      </div>
       <Dropdown trigger="click" @on-click="handleUser">
           <span class="username">
             {{username}}
@@ -19,7 +27,8 @@
 </template>
 
 <script>
-  import MenuIcon from '../MenuIcon/MenuIcon'
+  import MenuIcon from '../MenuIcon/MenuIcon';
+  import { mapState } from 'vuex';
   export default {
     name: "HeaderTop",
     data() {
@@ -28,6 +37,11 @@
         visible: false,
         username: window.localStorage.getItem('username')
       }
+    },
+    computed: {
+      ...mapState({
+        breadcrumbList: state => state.global.breadcrumbList
+      })
     },
     methods: {
       shrink() {
@@ -41,7 +55,16 @@
             path: '/login'
           })
         }
-      }
+      },
+      fullScreen() {
+        const el = document.documentElement;
+        const rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+        if (typeof rfs !== "undefined" && rfs) {
+          rfs.call(el);
+        }
+        return false;
+
+      },
     },
     components: {
       MenuIcon
@@ -50,18 +73,38 @@
 </script>
 
 <style lang="less" scoped>
+  @import "../../assets/theme/index";
   .header-container {
     width: 100%;
     height: 60px;
-    background-color: #fff;
+    background-color: @menu-dark-title;
     display: flex;
     align-items: center;
     justify-content: space-between;
     .menu-shrink {
       margin-left: 20px;
     }
-    .admin {
-      margin-right: 100px;
+    .left {
+      display: flex;
+      align-items: center;
+      .bread {
+        margin-left: 15px;
+      }
+    }
+    /deep/span {
+      color: @theme-global-color;
+    }
+    .right {
+      display: flex;
+      margin-right: 50px;
+      align-items: center;
+      .expand {
+        margin-right: 15px;
+        cursor: pointer;
+        /deep/.ivu-icon-md-expand {
+          color: @theme-global-color;
+        }
+      }
       .username {
         cursor: pointer;
         display: flex;

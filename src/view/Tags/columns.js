@@ -1,7 +1,7 @@
-const columns = (Vue) => {
+export default (Vue) => {
   return [
     {
-      title: '栏目名称',
+      title: '标签名',
       key: 'name',
       align: 'center'
     },
@@ -35,7 +35,7 @@ const columns = (Vue) => {
               marginRight: '10px'
             },
             on: {
-              click: () => (Vue.editCategory(row))
+              click: () => (Vue.editTag(row))
             }
           }, '修改'),
           h('Button', {
@@ -44,7 +44,7 @@ const columns = (Vue) => {
               size: 'small'
             },
             on: {
-              click: () => (Vue.deleteCategory(row))
+              click: () => (Vue.deleteTag(row))
             }
           }, '删除')
         ])
@@ -52,5 +52,3 @@ const columns = (Vue) => {
     },
   ]
 }
-
-export default columns

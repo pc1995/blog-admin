@@ -42,7 +42,27 @@ const columns = (Vue) => {
             on: {
               click: () => (Vue.replay(row))
             }
-          }, '回复')
+          }, '回复'),
+
+          h('Poptip', {
+            props: {
+              confirm: true,
+              title: '确定删除这条评论吗？'
+            },
+            on: {
+              'on-ok': () => (Vue.delete(row))
+            }
+          }, [
+            h('Button', {
+              props: {
+                type: 'error',
+                size: 'small'
+              },
+              style: {
+                marginRight: '10px'
+              },
+            }, '删除')
+          ])
         ])
       }
     },

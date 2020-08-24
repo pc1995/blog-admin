@@ -1,92 +1,80 @@
 <template>
-  <wrapper>
-    <div class="article" slot="content">
-      <Card>
-        <Form inline :label-width="100">
-          <FormItem label="所属分类">
-            <Select v-model="query.category_type" style="width: 180px">
-              <Option v-for="item in categoryData" :value="item.category_type" :key="item.id">{{ item.name }}</Option>
-            </Select>
-          </FormItem>
-          <FormItem label="文章类型">
-            <Select v-model="query.article_type" style="width: 180px">
-              <Option v-for="item in articleTypes" :value="item.id" :key="item.id">{{ item.name }}</Option>
-            </Select>
-          </FormItem>
-          <FormItem label="文章标题">
-            <Input placeholder="文章标题" type="text" style="width: 200px"/>
-          </FormItem>
-          <FormItem label="发布时间">
-            <DatePicker type="date" placeholder="Select date" style="width: 200px"></DatePicker>
-          </FormItem>
-          <FormItem :label-width="0">
-            <Button type="primary">查询</Button>
-          </FormItem>
-        </Form>
-        <Button type="primary" @click="addArticle">新增文章</Button>
-      </Card>
-      <div class="table-content">
-        <Table :columns="columns" width="100%" :data="dataSource"></Table>
-        <div class="page-wrapper">
-          <Page :total="page.total" show-sizer />
+  <div class="article" slot="content">
+    <Card>
+      <Form inline :label-width="100">
+        <FormItem label="所属分类">
+          <Select v-model="query.category_type" style="width: 180px">
+            <Option v-for="item in categoryData" :value="item.id" :key="item.id">{{ item.name }}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="文章标题">
+          <Input placeholder="文章标题" type="text" style="width: 200px"/>
+        </FormItem>
+        <FormItem label="发布时间">
+          <DatePicker type="date" placeholder="Select date" style="width: 200px"></DatePicker>
+        </FormItem>
+        <FormItem :label-width="0">
+          <Button type="primary">查询</Button>
+        </FormItem>
+      </Form>
+      <Button type="primary" @click="addArticle">新增文章</Button>
+    </Card>
+    <div class="table-content">
+      <Table :columns="columns" width="100%" :data="dataSource"></Table>
+      <div class="page-wrapper">
+        <Page :total="page.total" show-sizer />
+      </div>
+    </div>
+    <!---- 新增 --->
+    <Modal class="add-modal" v-model="visible" loading width="1000px" title="新增" @on-ok="save">
+      <div class="markdown-edit" v-if="visible">
+        <div class="markdown-form">
+          <Form ref="form" :label-width="80" :model="formData" :rules="rules">
+            <FormItem label="所属栏目" prop="article_type">
+              <Select v-model="formData.article_type" v-if="categoryData.length > 0" style="width: 200px">
+                <Option v-for="(item, index) in categoryData" v-if="item.id" :value="item.id" :key="index">{{ item.name }}</Option>
+              </Select>
+            </FormItem>
+            <FormItem label="标题" prop="articleTitle">
+              <Input v-model="formData.articleTitle" placeholder="文章标题"/>
+            </FormItem>
+            <FormItem label="选择标签" prop="tagList" >
+              <Select v-model.sync="formData.tagList" filterable multiple v-if="tagList.length > 0">
+                <Option v-for="(item, index) in tagList" :key="index" v-if="item.name" :value="item.name">{{item.name}}</Option>
+              </Select>
+            </FormItem>
+            <FormItem label="简介" prop="articleDesc">
+              <Input v-model="formData.articleDesc" type="textarea" placeholder="文章描述"/>
+            </FormItem>
+            <FormItem label="封面" prop="imgSrc">
+              <blog-upload @response="response" v-model="formData.imgSrc"></blog-upload>
+            </FormItem>
+            <FormItem label="上传视频" prop="link">
+              <Upload :before-upload="handleUpload" action="">
+                <Button icon="ios-cloud-upload-outline" id="uploadVideo">视频上传</Button>
+              </Upload>
+              <Progress :percent="progress" status="active" />
+            </FormItem>
+            <FormItem :label-width="0" prop="markdownContent">
+              <mavon-editor code-style="github"
+                            ref="md"
+                            :subfield="subField"
+                            @subfieldToggle="subFieldToggle"
+                            @save="save"
+                            @change="change"
+                            @imgAdd="imgAdd"
+                            v-model="formData.markdownContent"
+                            style="min-height: 500px"
+              ></mavon-editor>
+            </FormItem>
+          </Form>
         </div>
       </div>
-      <!---- 新增 --->
-      <Modal class="add-modal" v-model="visible" loading width="1000px" title="新增" @on-ok="save">
-        <div class="markdown-edit" v-if="visible">
-          <div class="markdown-form">
-            <Form ref="form" :label-width="80" :model="formData" :rules="rules">
-              <FormItem label="所属栏目" prop="article_type">
-                <Select v-model="formData.article_type" style="width: 200px">
-                  <Option v-for="item in articleTypes" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                </Select>
-              </FormItem>
-              <FormItem label="标题" prop="articleTitle">
-                <Input v-model="formData.articleTitle" placeholder="文章标题"/>
-              </FormItem>
-              <FormItem label="所属分类" prop="first_type_id" v-if="formData.article_type === 1">
-                <Select v-model="formData.first_type_id" style="width: 200px" @on-change="setCategory">
-                  <Option v-for="item in firstCategory" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                </Select>
-                <span v-if="secondCategory.length > 0" style="margin: 0 10px">-</span>
-                <Select v-if="secondCategory.length > 0" v-model="formData.second_type_id" style="width: 200px"
-                        @on-change="setSecondCategory">
-                  <Option v-for="item in secondCategory" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                </Select>
-              </FormItem>
-              <FormItem label="简介" prop="articleDesc">
-                <Input v-model="formData.articleDesc" type="textarea" placeholder="文章描述"/>
-              </FormItem>
-              <FormItem label="封面" prop="imgSrc">
-                <blog-upload @response="response" v-model="formData.imgSrc"></blog-upload>
-              </FormItem>
-              <FormItem label="上传视频" prop="link">
-                <Upload :before-upload="handleUpload" action="">
-                  <Button icon="ios-cloud-upload-outline" id="uploadVideo">视频上传</Button>
-                </Upload>
-                <Progress :percent="progress" status="active" />
-              </FormItem>
-              <FormItem :label-width="0" prop="markdownContent">
-                <mavon-editor code-style="github"
-                              ref="md"
-                              :subfield="subField"
-                              @subfieldToggle="subFieldToggle"
-                              @save="save"
-                              @change="change"
-                              @imgAdd="imgAdd"
-                              v-model="formData.markdownContent"
-                              style="min-height: 500px"
-                ></mavon-editor>
-              </FormItem>
-            </Form>
-          </div>
-        </div>
-      </Modal>
-      <Modal v-model="delVisible" title="删除分类" loading @on-ok="deleteData">
-        <p>是否删除当前文章？点击确认删除</p>
-      </Modal>
-    </div>
-  </wrapper>
+    </Modal>
+    <Modal v-model="delVisible" title="删除分类" loading @on-ok="deleteData">
+      <p>是否删除当前文章？点击确认删除</p>
+    </Modal>
+  </div>
 </template>
 
 <script>
@@ -105,8 +93,7 @@
     category_type: '',
     markdownContent: '',
     article_type: 1,
-    first_type_id: '',
-    second_type_id: '',
+    tagList: []
   }
   export default {
     name: "Article",
@@ -146,9 +133,6 @@
           imgSrc: [
             {required: false, message: '请上传封面图片'},
           ],
-          first_type_id: [
-            {required: true, message: '请选择所属分类'},
-          ],
           markdownContent: [
             {required: true, message: '请输入文章内容'},
           ]
@@ -158,21 +142,17 @@
           page: 1,
           total: 0
         },
-        articleTypes: [
-          {id: 1, name: '猿人世界',},
-          {id: 2, name: '教学视频',},
-          {id: 3, name: '生活诗歌',},
-          {id: 4, name: 'Flutter',},
-        ],
         delVisible: false,
         videoFile: '',
         progress: 0,
-        videoKey: ''
+        videoKey: '',
+        tagList: []
       }
     },
     created() {
       this.getArticle()
-      this.getCategoryList()
+      this.getCategoryList();
+      this.getTagList();
     },
     methods: {
       addArticle() {
@@ -198,7 +178,7 @@
           body: opt
         }).then(res => {
           this.dataSource = res.data;
-          this.page.total = res.attributes.total
+          this.page.total = res.attributes.total + 100
         })
       },
       imgAdd(pos, file) {
@@ -231,15 +211,9 @@
               category_type: this.category_text,
               is_video: false
             }
-            if(this.formData.first_type_id) {
-              payload.first_type_id =this.formData.first_type_id
-            }
-            if (this.formData.second_type_id) {
-              payload.second_type_id = this.formData.second_type_id
-            }
-            if (this.formData.article_type === 2) {
-              payload.category_type = '随记'
-            }
+            console.log('payload', payload)
+            payload.category_type = this.formData.tagList.join(',')
+            console.log('this.isChange', this.isChange)
             if (this.isChange) {
               payload.id = this.currentData.id
               for (let key in payload) {
@@ -251,6 +225,8 @@
             if (this.videoKey) {
               payload.video_key = this.videoKey
             }
+            console.log('console.log()')
+
             this.$store.dispatch('article/article', {
               method: this.isChange ? 'PATCH' : 'POST',
               body: payload
@@ -265,17 +241,11 @@
       getCategoryList() {
         this.$store.dispatch('article/category').then(res => {
           this.categoryData = res.data
-          this.firstCategory = res.data.filter(item => item.category_type === 1)
         })
       },
-      setCategory(value) {
-        const data = this.categoryData.filter(item => item.id === value)
-        this.category_text = data[0].name
-        this.secondCategory = data[0].sub_category
-      },
-      setSecondCategory(value) {
-        const name = this.secondCategory.filter(item => item.id === value)[0].name
-        this.category_text += `,${name}`
+      async getTagList() {
+        const res = await this.$store.dispatch('tag/getTagList');
+        this.tagList = res.data;
       },
       modifyArticle(row) {
         this.visible = true
@@ -284,10 +254,9 @@
           articleTitle: row.title,
           articleDesc: row.desc,
           imgSrc: row.img_src,
-          first_type_id: row.first_type_id,
-          second_type_id: row.second_type_id,
           category_type: row.category_type,
-          article_type: row.article_type
+          article_type: row.article_type,
+          tagList: row.category_type.split(',')
         }
         this.formData.markdownContent = row.markdown
         this.currentData = row
@@ -369,11 +338,10 @@
   .article {
     /deep/.m-content {
       overflow: hidden;
-      display: -webkit-box;
       text-overflow: ellipsis;
-      -webkit-line-clamp: 4;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
-      white-space: normal;
       margin: 10px;
     }
 

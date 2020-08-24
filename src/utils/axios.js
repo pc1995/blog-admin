@@ -47,6 +47,9 @@ const Axios = async (url, options = {}) => {
     if (res && res.status >= 200 && res.status < 300) {
       return resolve(res.data)
     } else {
+      if (res.status === 403) {
+        window.location.href = '/login'
+      }
       return reject(res)
     }
   })

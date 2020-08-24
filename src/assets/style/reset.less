@@ -1,3 +1,4 @@
+@import "../theme/index";
 body,
 div,
 header,
@@ -30,7 +31,6 @@ select {
   text-decoration: none;
   border: none;
   outline: none;
-  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
   &:focus {
     outline: none;
   }
@@ -46,10 +46,13 @@ h3 {
 }
 
 body {
-  background-color: #f7f7f7;
   height: 100%;
   padding-right: 0 !important;
   overflow: auto !important;
+  background-color: @body-background;
+}
+body, li, th, td {
+  color: @menu-dark-subsidiary-color;
 }
 
 ol {
@@ -80,4 +83,118 @@ pre, code, xmp, plaintext, listing {
 }
 .markdown-body h1, .markdown-body h2 {
   font-weight: normal;
+}
+
+#app {
+  .ivu-card {
+    background-color: @menu-dark-title;
+    border: none;
+    box-shadow: none;
+    .ivu-input, .ivu-select-selection {
+      background-color: @menu-dark-title;
+      border-color: @border-color-black;
+      &:focus {
+        border-color: @border-color-black;
+        outline: none;
+        box-shadow: none;
+        color: @text-color;
+      }
+    }
+    .ivu-form-item-label {
+      color: @theme-global-color;
+    }
+
+  }
+  .ivu-select-dropdown {
+    background-color: @menu-dark-title;
+  }
+  .ivu-select-item {
+    //color: @theme-global-color;
+  }
+  .ivu-table {
+    background-color: @menu-dark-title;
+    td, td {
+      background-color: @menu-dark-title;
+    }
+    .ivu-table-header {
+      th {
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+    &:before {
+      transform: scaleY(0.8);
+      background-color: @border-color-black;
+    }
+  }
+  .ivu-table-wrapper {
+    overflow: inherit;
+  }
+  .ivu-menu-submenu-title {
+    padding: 15px 24px;
+  }
+  .ivu-btn-small {
+    font-size: 12px;
+  }
+  .ivu-poptip-content {
+    .ivu-poptip-inner {
+      background-color: @body-background;
+      .ivu-poptip-body {
+        display: flex;
+        align-items: center;
+      }
+      .ivu-icon-ios-help-circle {
+        position: static;
+      }
+      .ivu-poptip-body-message {
+        padding-left: 6px;
+      }
+      .ivu-poptip-footer {
+        color: @theme-global-color;
+      }
+
+    }
+    .ivu-poptip-arrow::after {
+      border-top-color: @body-background;
+    }
+  }
+  .ivu-modal {
+    .ivu-input, .ivu-select-selection {
+      background-color: @menu-dark-title;
+      border-color: @border-color-black;
+      &:focus {
+        border-color: @border-color-black;
+        outline: none;
+        box-shadow: none;
+        color: @text-color;
+      }
+    }
+  }
+
+  // 分页
+  .ivu-page-item {
+    background-color: @menu-dark-title;
+    border-color: @border-color-split;
+  }
+  .ivu-page {
+    .ivu-page-prev, .ivu-page-next {
+      background-color: @menu-dark-title;
+      border-color: @border-color-split;
+      .ivu-icon {
+        color: #ffffff;
+      }
+    }
+    .ivu-select-selection {
+      background-color: @menu-dark-title;
+      //border-color: @border-color-black;
+      .ivu-select-item {
+       // color: @theme-global-color;
+      }
+    }
+  }
+
+}
+
+.icon-tab {
+  display: flex;
+  justify-content: space-between;
 }

@@ -12,15 +12,17 @@
   "dependencies": {
     "axios": "^0.18.0",
     "blueimp-md5": "^2.12.0",
+    "echarts": "^4.8.0",
     "highlight.js": "^9.14.2",
-    "iview": "^3.2.2",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "mavon-editor": "^2.6.17",
     "nprogress": "^0.2.0",
     "qiniu-js": "^2.5.5",
+    "view-design": "^4.2.0",
     "vue": "^2.5.2",
     "vue-amap": "^0.5.10",
+    "vue-echarts": "^5.0.0-beta.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.1.0"
   },

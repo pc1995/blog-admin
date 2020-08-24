@@ -1,21 +1,25 @@
 <template>
   <div id="app">
-    <router-view/>
+    <wrapper v-if="$route.path !== '/login'">
+      <router-view slot="content" />
+    </wrapper>
+    <router-view v-else />
   </div>
 </template>
 
 <script>
-export default {
-  name: 'App'
-}
+  import Wrapper from './components/Wrapper/Wrapper'
+  export default {
+    name: 'App',
+    components: {
+      Wrapper
+    }
+  }
+
 </script>
 
-<style>
+<style lang="less">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
   height: 100%;
   width: 100%;
 }

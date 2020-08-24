@@ -4,17 +4,23 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-import iview from 'iview'
+import viewDesign from 'view-design'
 import mavonEditor from 'mavon-editor'
-import Axios from './utils/Axios'
-import 'iview/dist/styles/iview.css'
+// import ECharts from 'vue-echarts'
+import Axios from './utils/axios'
+import 'view-design/dist/styles/iview.css'
+
 import './assets/style/reset.less'
+import './assets/theme/index.less'
 import './assets/style/common.less'
 import 'nprogress/nprogress.css'
 import 'mavon-editor/dist/css/index.css'
 import 'highlight.js/styles/github.css' //样式文件
-Vue.use(iview)
+
+
+Vue.use(viewDesign)
 Vue.use(mavonEditor)
+// Vue.component('v-chart', ECharts)
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = Axios

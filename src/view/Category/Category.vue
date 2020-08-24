@@ -1,46 +1,49 @@
 <template>
-  <wrapper>
-    <div slot="content">
-      <Card>
-        <Button type="primary" @click="addCategory">新增分类</Button>
-      </Card>
+  <div slot="content">
+    <Card>
+      <Button type="primary" @click="addCategory">新增分类</Button>
+    </Card>
 
-      <div class="table-content">
-        <Table :columns="columns" width="100%" :data="dataSource"></Table>
-      </div>
-      <Modal v-model="visible" title="新增分类" loading @on-ok="submit">
-        <Form :label-width="80" ref="form" :model="formData" :rules="rules" v-if="visible">
-          <FormItem label="分类等级" prop="category_type">
-            <RadioGroup v-model="formData.category_type" @on-change="changeType">
-              <Radio :label="1" style="margin-right: 20px">一级分类</Radio>
-              <Radio :label="2">二级分类</Radio>
-            </RadioGroup>
-          </FormItem>
-          <FormItem label="所属分类" prop="parent_category" v-if="formData.category_type === 2">
-            <Select v-model="formData.parent_category" style="width: 160px">
-              <Option v-for="item in parent_types" :value="item.id" :key="item.id">{{ item.name }}</Option>
-            </Select>
-          </FormItem>
-          <FormItem label="分类名称" prop="name">
-            <Input v-model="formData.name" placeholder="分类名称" />
-          </FormItem>
-        </Form>
-      </Modal>
-      <Modal v-model="delVisible" title="删除分类" loading @on-ok="deleteData">
-        <p>是否删除当前分类？点击确认删除分类</p>
-      </Modal>
+    <div class="table-content">
+      <Table :columns="columns" width="100%" :data="dataSource"></Table>
     </div>
-  </wrapper>
+    <Modal v-model="visible" title="新增分类" loading @on-ok="submit">
+      <Form :label-width="80" ref="form" :model="formData" :rules="rules" v-if="visible">
+        <FormItem label="分类名称" prop="name">
+          <Input v-model="formData.name" placeholder="分类名称" />
+        </FormItem>
+        <FormItem label="栏目图标" prop="icon">
+          <Select v-model="formData.icon" style="width: 160px">
+            <Option v-for="(item, index) in icons" :value="item" :label="item" :key="index">
+              <div class="icon-tab">
+                <span>{{item}}</span>
+                <span class="iconfont" :class="item"></span>
+              </div>
+            </Option>
+          </Select>
+
+          <span class="iconfont" :class="formData.icon"></span>
+        </FormItem>
+        <FormItem label="排序">
+          <Input v-model="formData.sort" placeholder="排序" />
+        </FormItem>
+      </Form>
+    </Modal>
+    <Modal v-model="delVisible" title="删除分类" @on-ok="deleteData">
+      <p>是否删除当前分类？点击确认删除分类</p>
+    </Modal>
+  </div>
 </template>
 
 <script>
   import Wrapper from '../../components/Wrapper/Wrapper'
   import Columns from './columns'
+  import icons from '../../utils/icon.name'
 
   const FORM_DATA = {
     name: '',
-    category_type: 1,
-    parent_category: '',
+    icon: '',
+    sort: 1,
   }
   export default {
     name: "Category",
@@ -52,11 +55,8 @@
           name: [
             {required: true, message: '请输入分类名称'},
           ],
-          category_type: [
-            {required: true, message: '请选择分类等级'},
-          ],
-          parent_category: [
-            {required: true, message: '请选择所属分类'},
+          icon: [
+            { required: true, message: '请选择栏目图标' },
           ],
         },
         parent_types: [],
@@ -65,7 +65,8 @@
         delVisible: false,
         currentData: null,
         isEdit: false,
-
+        icons,
+        iconVisible: false
       }
     },
     created() {
@@ -81,9 +82,6 @@
             const opt = {
               ...this.formData,
               category_type: Number(this.formData.category_type)
-            }
-            if (this.formData.category_type !== 1) {
-              opt['parent_category'] = this.formData.parent_category
             }
             const payload = this.isEdit ? {
                 method: 'PATCH',
@@ -156,6 +154,9 @@
   }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+  .icon-tab {
+    display: flex;
+    justify-content: space-between;
+  }
 </style>

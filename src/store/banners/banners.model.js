@@ -1,4 +1,4 @@
-import Axios from '../../utils/Axios'
+import Axios from '../../utils/axios'
 export default {
   namespace: 'banners',
 

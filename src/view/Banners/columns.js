@@ -1,4 +1,3 @@
-import {Button} from 'iview'
 const columns = (Vue) => {
   return [
     {
