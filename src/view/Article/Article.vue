@@ -32,15 +32,19 @@
           <Form ref="form" :label-width="80" :model="formData" :rules="rules">
             <FormItem label="所属栏目" prop="article_type">
               <Select v-model="formData.article_type" v-if="categoryData.length > 0" style="width: 200px">
-                <Option v-for="(item, index) in categoryData" v-if="item.id" :value="item.id" :key="index">{{ item.name }}</Option>
+               <template v-for="(item, index) in categoryData">
+                  <Option  v-if="item.id" :value="item.id" :key="index">{{ item.name }}</Option>
+               </template>
               </Select>
             </FormItem>
             <FormItem label="标题" prop="articleTitle">
               <Input v-model="formData.articleTitle" placeholder="文章标题"/>
             </FormItem>
             <FormItem label="选择标签" prop="tagList" >
-              <Select v-model.sync="formData.tagList" filterable multiple v-if="tagList.length > 0">
-                <Option v-for="(item, index) in tagList" :key="index" v-if="item.name" :value="item.name">{{item.name}}</Option>
+              <Select v-model="formData.tagList" filterable multiple v-if="tagList.length > 0">
+                <template v-for="(item, index) in tagList">
+                  <Option  :key="index" v-if="item.name" :value="item.name">{{item.name}}</Option>
+                </template>
               </Select>
             </FormItem>
             <FormItem label="简介" prop="articleDesc">
@@ -115,7 +119,7 @@
         secondCategory: [],
         isChange: false,
         currentData: null,
-        markdown: '',
+        markdown: window.localStorage.getItem('articleMarkdown') || '',
         content: '',
         rules: {
           columns_id: [
@@ -183,13 +187,13 @@
       },
       imgAdd(pos, file) {
         const formData = new FormData()
-        console.log('file', file)
+
         formData.append('image', file)
-        console.log('imgAdd', formData.get('image'))
+
         this.upload(pos, formData)
       },
       upload(pos, formData) {
-        console.log('formData', formData)
+
         this.$store.dispatch('article/upload', formData).then(res => {
           this.$emit('response', res.data)
           if (res.state === 0) {
@@ -208,12 +212,17 @@
               markdown: value,
               img_src: this.formData.imgSrc,
               article_type: this.formData.article_type,
-              category_type: this.category_text,
               is_video: false
             }
-            console.log('payload', payload)
-            payload.category_type = this.formData.tagList.join(',')
-            console.log('this.isChange', this.isChange)
+
+            payload.tag_cn = this.formData.tagList.join(',')
+
+            const categoryEn = this.tagList.filter(item => this.formData.tagList.some(tag => tag === item.name))
+
+            if (categoryEn) {
+              payload.tag_en = categoryEn.map(item => item.type).join(',')
+            }
+
             if (this.isChange) {
               payload.id = this.currentData.id
               for (let key in payload) {
@@ -225,7 +234,7 @@
             if (this.videoKey) {
               payload.video_key = this.videoKey
             }
-            console.log('console.log()')
+
 
             this.$store.dispatch('article/article', {
               method: this.isChange ? 'PATCH' : 'POST',
@@ -254,9 +263,9 @@
           articleTitle: row.title,
           articleDesc: row.desc,
           imgSrc: row.img_src,
-          category_type: row.category_type,
+          tag_cn: row.tag_cn,
           article_type: row.article_type,
-          tagList: row.category_type.split(',')
+          tagList: row.tag_cn.split(',')
         }
         this.formData.markdownContent = row.markdown
         this.currentData = row
@@ -281,6 +290,7 @@
       change(value, render) {
         this.markdown = value
         this.content = render
+        window.localStorage.setItem('articleMarkdown', value)
       },
       update(body) {
         this.$store.dispatch('article/article', {

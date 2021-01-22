@@ -4,18 +4,20 @@ const columns = (Vue) => {
     {
       title: '昵称',
       key: 'nickname',
-      align: 'center'
+      align: 'center',
+      render(h, { row }) {
+        return h('span', row.user.nickname)
+      }
     },
     {
       title: '邮箱',
       key: 'email',
       align: 'center',
+      render(h, { row }) {
+        return h('span', row.user.email)
+      }
     },
-    {
-      title: '网站',
-      key: 'link',
-      align: 'center',
-    },
+
     {
       title: '评论内容',
       key: 'content',

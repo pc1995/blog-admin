@@ -35,12 +35,18 @@
       return {
         type: 'fold',
         visible: false,
-        username: window.localStorage.getItem('username')
+
       }
     },
     computed: {
       ...mapState({
-        breadcrumbList: state => state.global.breadcrumbList
+        breadcrumbList: state => state.global.breadcrumbList,
+        username: state => {
+          if (state.user.info) {
+            return state.user.info.username
+          }
+          return ''
+        }
       })
     },
     methods: {

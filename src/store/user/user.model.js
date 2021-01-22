@@ -7,6 +7,12 @@ export default {
       username: '',
       user_id: null,
       isLogin: !!localStorage.getItem('token')
+    },
+    info: null
+  },
+  mutations: {
+    ['update/userInfo'](state, info) {
+      state.info = info
     }
   },
   actions: {
@@ -19,6 +25,15 @@ export default {
         }
       })
       saveUserInfo(res)
+      return res
+    },
+    async ['user/info']({commit}, payload) {
+      const res = await Axios('/v1/api/user_info/', {
+        method: 'get',
+      })
+      if (res.data) {
+        commit('update/userInfo', res.data)
+      }
       return res
     },
     async ['user/register']({commit}, payload) {

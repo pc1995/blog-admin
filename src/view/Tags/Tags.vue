@@ -13,9 +13,12 @@
       </Table>
     </div>
     <Modal v-model="visible" title="新增分类" loading @on-ok="submit">
-      <Form :label-width="80" ref="form" :model="formData" :rules="rules" v-if="visible">
+      <Form :label-width="120" ref="form" :model="formData" :rules="rules" v-if="visible">
         <FormItem label="标签名称" prop="name">
           <Input v-model="formData.name" placeholder="标签名称" />
+        </FormItem>
+         <FormItem label="标签类型(英文)" prop="type">
+          <Input v-model="formData.type" placeholder="标签类型(英文)" />
         </FormItem>
         <FormItem label="标签图标" prop="icon">
           <Select v-model="formData.icon" style="width: 160px">
@@ -40,7 +43,8 @@
 
   const FORM_DATA = {
     name: '',
-    icon: ''
+    icon: '',
+    type: ''
   }
   export default {
     name: "Tags",
@@ -56,14 +60,25 @@
           name: [
             {required: true, message: '请输入标签名称'},
           ],
+           type: [
+            {required: true, message: '请输入标签类型'},
+          ],
           icon: [
             { required: true, message: '请选择标签图标' },
           ],
         },
+        currentData: null
       }
     },
     created() {
       this.getTagList();
+    },
+    watch: {
+      visible(visible) {
+        if (!visible) {
+          this.type = 'add'
+        }
+      }
     },
     methods: {
       getTagList() {
@@ -75,7 +90,12 @@
         this.visible = true;
         this.type = 'add';
       },
-      editTag() {},
+      editTag(row) {
+         this.visible = true;
+        this.type = 'edit';
+        this.formData = row;
+        this.currentData = row;
+      },
       deleteTag() {},
       submit() {
         this.$refs.form.validate(valid => {
@@ -83,7 +103,7 @@
             const opt = {
               ...this.formData,
             }
-            const payload = this.isEdit ? {
+            const payload = this.type === 'edit' ? {
               method: 'PATCH',
               body: {...opt, id: this.currentData.id}
             } : {

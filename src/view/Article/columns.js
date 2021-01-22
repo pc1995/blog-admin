@@ -7,17 +7,21 @@ const columns = (Vue) => {
       align: 'center',
       render(h, {row}) {
         console.log('row', row)
-        return h('img', {
+        return h('div', {
           attrs: {
-            src: row.img_src,
-            width: '80',
-            height: '60'
+            'data-src': row.img_src,
+
           },
           style: {
-            marginTop: '5px'
+            width: '80px',
+            height: '50px',
+            lineHeight: '50px',
+            margin: '5px auto',
+            backgroundImage: `url(${row.img_src})`,
+            backgroundSize: 'cover'
           },
           class: ''
-        })
+        }, row.img_src ? '' : '暂无图片')
       }
     },
     {
@@ -100,20 +104,7 @@ const columns = (Vue) => {
         }, row.desc)
       }
     },
-    {
-      title: '文章内容',
-      key: 'markdown',
-      align: 'center',
-      width: '400',
-      render(h, {row}) {
-        return h('p', {
-          class: 'm-content',
-          attrs: {
-            title: row.markdown
-          }
-        }, row.markdown)
-      }
-    },
+
     {
       title: '操作',
       align: 'center',

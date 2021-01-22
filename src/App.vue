@@ -13,6 +13,9 @@
     name: 'App',
     components: {
       Wrapper
+    },
+    mounted() {
+      this.$store.dispatch('user/info')
     }
   }
 

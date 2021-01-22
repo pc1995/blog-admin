@@ -19,8 +19,8 @@
     <div class="table-content">
       <Table :columns="columns" width="100%" :data="dataSource"></Table>
     </div>
-    <Modal title="新增轮播图" width="560" loading v-model="visible" @on-cancel="cancel" @on-ok="addSubmit">
-      <Form v-if="visible" :label-width="90" ref="form" :model="formData" :rules="rules">
+    <Modal title="新增轮播图" width="600" loading v-model="visible" @on-cancel="cancel" @on-ok="addSubmit">
+      <Form v-if="visible" :label-width="100" ref="form" :model="formData" :rules="rules">
         <FormItem label="归属产品" prop="product_name">
           <Select v-model="formData.product_name" style="width: 100%">
             <Option v-for="item in products" :key="item.value" :value="item.value">{{item.label}}</Option>

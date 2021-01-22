@@ -17,6 +17,11 @@ export default (Vue) => {
       }
     },
     {
+      title: '标签类型(英文)',
+      key: 'type',
+      align: 'center'
+    },
+    {
       title: '创建时间',
       key: 'created_at',
       align: 'center'
